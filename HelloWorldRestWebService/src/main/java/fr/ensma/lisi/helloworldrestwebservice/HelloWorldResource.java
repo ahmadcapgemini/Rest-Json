@@ -18,6 +18,6 @@ public class HelloWorldResource {
 	@GET
 	@Produces("text/plain")
 	public String getHelloWorld() {
-		return "Hello World from text/plain";
+		return "Hello World from text/plain";   //coucou
 	}
 }
