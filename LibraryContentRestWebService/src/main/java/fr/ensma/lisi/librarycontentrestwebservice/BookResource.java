@@ -25,11 +25,11 @@ import javax.xml.bind.JAXBElement;
 /**
  * @author Mickael BARON (baron.mickael@gmail.com)
  * 
- * Date : January 2011
+ *         Date : January 2011
  */
 @Path("/contentbooks")
 public class BookResource {
-	
+
 	private byte[] readFromStream(InputStream stream) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1000];
@@ -42,7 +42,7 @@ public class BookResource {
 		} while (wasRead > -1);
 		return baos.toByteArray();
 	}
-	
+
 	/**
 	 * 
 	 * @param newBook
@@ -52,16 +52,12 @@ public class BookResource {
 	@POST
 	@Path("uribuilder2")
 	public Response createURIBooks(Book newBook, @Context UriInfo uri) {
-		System.out.println("BookResource.createURIBooks():"+newBook);
-		
-		URI build = UriBuilder
-			.fromUri("http://www.mylocalhost")
-			.path("path1")
-			.path("path2")
-			.build();
+		System.out.println("BookResource.createURIBooks():" + newBook);
+
+		URI build = UriBuilder.fromUri("http://www.mylocalhost").path("path1").path("path2").build();
 		return Response.created(build).build();
-	}	
-	
+	}
+
 	/**
 	 * 
 	 * @param newBook
@@ -72,15 +68,12 @@ public class BookResource {
 	@Path("uribuilder1")
 	public Response createBooksFromURI(Book newBook, @Context UriInfo uri) {
 		System.out.println("BookResource.createBooksFromURI()");
-		
-		URI absolutePath = uri
-			.getAbsolutePathBuilder()
-			.queryParam("param1", newBook.getName())
-			.path(newBook.getIsbn())
-			.build();
+
+		URI absolutePath = uri.getAbsolutePathBuilder().queryParam("param1", newBook.getName()).path(newBook.getIsbn())
+				.build();
 		return Response.created(absolutePath).build();
-	}	
-	
+	}
+
 	/**
 	 * 
 	 * @param newBook
@@ -91,12 +84,11 @@ public class BookResource {
 	@Path("response")
 	public Response createBasicBooks(Book newBook, @Context UriInfo uri) {
 		System.out.println("BookResource.createBasicBooks()");
-		
+
 		URI absolutePath = uri.getAbsolutePath();
 		return Response.created(absolutePath).build();
 	}
 
-	
 	/**
 	 * URI: /response/maintenance/
 	 * 
@@ -106,12 +98,10 @@ public class BookResource {
 	@GET
 	public Response getMaintenanceBooks() {
 		System.out.println("BookResource.getMaintenanceBooks()");
-		
-		return Response
-			.serverError()
-			.build();
+
+		return Response.serverError().build();
 	}
-	
+
 	/**
 	 * URI: /contentbooks/response/
 	 * 
@@ -121,47 +111,42 @@ public class BookResource {
 	@GET
 	public Response getBooks() {
 		System.out.println("BookResource.getBooks()");
-		
-		return Response
-			.status(Response.Status.OK)
-			.header("param1", "Bonjour")
-			.header("param2", "Hello")
-			.entity("Ceci est le message du coprs de la réponse")
-			.header("serverd", "keulkeul")
-			.build();
+
+		return Response.status(Response.Status.OK).header("param1", "Bonjour").header("param2", "Hello")
+				.entity("Ceci est le message du coprs de la réponse").header("serverd", "keulkeul").build();
 	}
-	
+
 	/**
 	 * URI: /contentbooks/jaxbxml/
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("jaxbxml")
 	@Consumes("application/xml")
 	@PUT
 	public void updateContentBooksWithJAXBXML(Book current) throws IOException {
 		System.out.println("BookResource.updateContentBooksWithJAXBXML()");
-		
+
 		System.out.println("Name: " + current.getName() + ", ISBN: " + current.getIsbn());
-	}	
-	
+	}
+
 	/**
 	 * URI: /contentbooks/jaxbjson/12
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("jaxbjson/{id}")
 	@Produces("application/json")
 	@GET
-	public Book getContentBooksWithJAXBJSON(@PathParam("id") String id) throws IOException {
-		System.out.println("BookResource.getContentBooksWithJAXBJSON()");
-		
+	public Book getContentJokesWithJAXBJSON(@PathParam("id") int id) throws IOException {
+		System.out.println("JokeResource.getContentBooksWithJAXBJSON()");
+
 		Book myBook = new Book();
 		myBook.setIsbn("1112223");
 		myBook.setName("Java pour les nuls");
-		
+
 		return myBook;
 	}
 
@@ -170,16 +155,15 @@ public class BookResource {
 	@PUT
 	public void updateContentBooksWithJAXBJSON(Book current) throws IOException {
 		System.out.println("BookResource.updateContentBooksWithJAXBJSON()");
-		
+
 		System.out.println(current);
-	}		
-	
-	
+	}
+
 	/**
 	 * URI: /contentbooks/jaxbxmlwithjaxbelement/
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("jaxbxmlwithjaxbelement")
 	@Consumes("application/xml")
@@ -189,8 +173,8 @@ public class BookResource {
 
 		Book current = currentJAXBElemnt.getValue();
 		System.out.println("Name: " + current.getName() + ", ISBN: " + current.getIsbn());
-	}		
-	
+	}
+
 	/**
 	 * URI: /contentbooks/jaxbxml/
 	 * 
@@ -201,25 +185,25 @@ public class BookResource {
 	@Produces("application/xml")
 	public Book getContentBooksWithJAXBXML() {
 		System.out.println("BookResource.getContentBooksWithJAXBXML()");
-		
+
 		Book current = new Book();
 		current.setIsbn("123-456-789");
 		current.setName("Harry Potter");
-		
-		return current;		
-	}	
-	
+
+		return current;
+	}
+
 	/**
 	 * URI: /contentbooks/string/
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("string")
 	@PUT
 	public void updateContentBooksWithString(String current) throws IOException {
 		System.out.println("BookResource.updateContentBooksWithString()");
-		
+
 		System.out.println(current);
 	}
 
@@ -233,10 +217,10 @@ public class BookResource {
 	@Produces(MediaType.TEXT_XML)
 	public String getContentBooksWithString() {
 		System.out.println("BookResource.getContentBooksWithString()");
-		
-		return "<?xml version=\"1.0\"?>" + "<details>Ce livre est une introduction sur la vie" + "</details>";		
-	}	
-	
+
+		return "<?xml version=\"1.0\"?>" + "<details>Ce livre est une introduction sur la vie" + "</details>";
+	}
+
 	/**
 	 * URI: /contentbooks/inputstream/
 	 * 
@@ -248,43 +232,43 @@ public class BookResource {
 	@Produces(MediaType.TEXT_XML)
 	public InputStream getContentBooksWithInputStream() throws FileNotFoundException {
 		System.out.println("BookResource.getContentBooksWithInputStream()");
-		
+
 		FileInputStream fileInputStream = new FileInputStream("d:\\coursREST\\example.xml");
 		return fileInputStream;
 	}
-	
+
 	/**
 	 * URI: /contentbooks/file/
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("file")
 	@PUT
 	public void updateContentBooksWithFile(File file) throws IOException {
 		System.out.println("BookResource.updateContentBooksWithFile()");
-		
+
 		byte[] bytes = readFromStream(new FileInputStream(file));
 		String input = new String(bytes);
 		System.out.println(input);
-	}	
-	
+	}
+
 	/**
 	 * URI: /contentbooks/inputstream/
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Path("inputstream")
 	@PUT
 	public void updateContentBooksWithInputStream(InputStream is) throws IOException {
 		System.out.println("BookResource.updateContentBooksWithInputStream()");
-		
+
 		byte[] bytes = readFromStream(is);
 		String input = new String(bytes);
 		System.out.println(input);
 	}
-	
+
 	/**
 	 * URI: /contentbooks/file/
 	 * 
@@ -295,8 +279,8 @@ public class BookResource {
 	@Produces(MediaType.TEXT_XML)
 	public File getContentBooksWithFile() {
 		System.out.println("BookResource.getContentBooksWithFile()");
-		
+
 		File file = new File("d:\\coursREST\\example.xml");
-		return file;		
+		return file;
 	}
 }
